@@ -44,13 +44,11 @@ app.get("/filteredimage", async (req, res) => {
 
     let out_image_file = null
 
-    out_image_file = await filterImageFromURL(image_url);
-
-    // await filterImageFromURL(image_url).then((out_file_path) => {
-    //   out_image_file = out_file_path
-    //   console.log("The image file %s was processed locally: %s", image_url, out_file_path);
-    // }).catch(() => {
-    //   return res.status(500).send("Hello! Something went wrong processing your image! Have a nice day!")});
+    await filterImageFromURL(image_url).then((out_file_path) => {
+      out_image_file = out_file_path
+      console.log("The image file %s was processed locally: %s", image_url, out_file_path);
+    }).catch(() => {
+      return res.status(500).send("Hello! Something went wrong processing your image! Have a nice day!")});
 
     return res.status(200).sendFile(out_image_file, async () => {
 

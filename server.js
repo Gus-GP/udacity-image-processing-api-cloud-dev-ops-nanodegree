@@ -33,44 +33,45 @@ app.get("/filteredimage", async (req, res) => {
   console.log(image_url)
 
   if (!image_url) {
-    return res.status(400).send("Hello! please provide and define the image_url field :) example: /filteredimage?image_url=cool.png");
+    res.status(400).send("Hello! please provide and define the image_url field :) example: /filteredimage?image_url=https://yada/yada/files/cool.png");
+    return;
   }
 
   if (!isValidUrl(image_url)) {
-    return res.status(400).send("Hello! looks like something is off with your image URL, could you double check and try again? Thanks :)");
+    res.status(400).send("Hello! looks like something is off with your image URL, could you double check and try again? Thanks :)");
+    return;
   }
 
-  try {
+  let out_image_file = null
 
-    let out_image_file = null
+  await filterImageFromURL(image_url).then((out_file_path) => {
+    out_image_file = out_file_path
+    console.log("The image file %s was processed locally: %s", image_url, out_file_path);
+  }).catch(() => {
+    res.status(422).send("Hello! Something went wrong processing your file! Are you sure is an image (.png,.jpeg)? ;)")
+    return;
+  });
 
-    await filterImageFromURL(image_url).then((out_file_path) => {
-      out_image_file = out_file_path
-      console.log("The image file %s was processed locally: %s", image_url, out_file_path);
-    }).catch(() => {
-      return res.status(500).send("Hello! Something went wrong processing your image! Have a nice day!")});
+  if(out_image_file){
 
-    return res.status(200).sendFile(out_image_file, async () => {
+    res.status(200).sendFile(out_image_file, async () => {
 
       console.log("Filtered Image File sent as a response");
-
+  
       await deleteLocalFiles([out_image_file]).then(() => {
         console.log("The local image file %s was deleted", out_image_file);
       }).catch(() => {
-        return res.status(500).send("Hello! Something went wrong deleting your image! Have a nice day!")
+        res.status(500).send("Hello! Something went wrong deleting your image! Have a nice day!")
+        return;
       });;
-
+  
+    }).catch(() => {
+      res.status(500).send("Hello! Something went wrong sending your file! Please try again ;)")
+      return;
     });
 
   }
 
-  catch (error) {
-
-    let errorString = 'Oh no! something went wrong. Please try again... error = ' + error
-
-    return res.status(500).send(errorString);
-
-  }
 });
 
 // Root Endpoint

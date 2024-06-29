@@ -21,11 +21,12 @@ Successful URL responses should have a 200 code. Ensure that you include error c
 
 Example requests:
 
+- {HOST}:{PORT}/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/b/bd/Golden_tabby_and_white_kitten_n01.jpg
 - {HOST}:{PORT}/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/5/5c/L-alanine-3D-balls.png
 - {HOST}:{PORT}/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/commons/3/32/Cingulata2.jpg
 - {HOST}:{PORT}/filteredimage?image_url=https://upload.wikimedia.org/wikipedia/en/d/dc/Dark_Matter_TV_series_logo.jpg
 
-## Link to Endpoint URL
+## Link to AWS EB Endpoint URL
 
 - http://udacity-image-processing-api-cloud-dev-0.us-east-1.elasticbeanstalk.com/
 

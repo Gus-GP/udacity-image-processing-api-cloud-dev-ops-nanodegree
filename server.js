@@ -52,22 +52,26 @@ app.get("/filteredimage", async (req, res) => {
     return;
   });
 
-  if(out_image_file){
+  if (out_image_file) {
 
-    res.status(200).sendFile(out_image_file, async () => {
+    res.status(200).sendFile(out_image_file, async (Errback) => {
 
-      console.log("Filtered Image File sent as a response");
-  
-      await deleteLocalFiles([out_image_file]).then(() => {
-        console.log("The local image file %s was deleted", out_image_file);
-      }).catch(() => {
-        res.status(500).send("Hello! Something went wrong deleting your image! Have a nice day!")
-        return;
-      });;
-  
-    }).catch(() => {
-      res.status(500).send("Hello! Something went wrong sending your file! Please try again ;)")
-      return;
+      if (Errback) {
+        res.status(500).send("Hello! Something went wrong sending your file! please try again")
+      }
+
+      else {
+
+        console.log("Filtered Image File sent as a response");
+
+        await deleteLocalFiles([out_image_file]).then(() => {
+          console.log("The local image file %s was deleted", out_image_file);
+        }).catch(() => {
+          res.status(500).send("Hello! Something went wrong deleting your image! Have a nice day!")
+          return;
+        });
+      }
+
     });
 
   }
